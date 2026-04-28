@@ -1,7 +1,9 @@
 const Grid = () => {
   return (
-    <div>
-      Grid
+    <div className="grid">
+      {Array(16).fill(null).map((_, i) => (
+        <div key={i} className="cell"></div>
+      ))}
     </div>
   );
 };

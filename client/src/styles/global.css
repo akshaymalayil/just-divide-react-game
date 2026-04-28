@@ -1,0 +1,24 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 90px);
+  gap: 12px;
+  background: #1f8f97;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.cell {
+  width: 90px;
+  height: 90px;
+  background: #0e6f75;
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+}
+
+.game-area {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 50px;
+  margin-top: 30px;
+}
