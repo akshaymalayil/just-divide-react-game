@@ -15,6 +15,9 @@ function App() {
   const [keepTile, setKeepTile] = useState(null);
   // Tracks whether the active tile is currently being dragged
   const [isDragging, setIsDragging] = useState(false);
+  // Stores { value, source } of the tile currently being dragged.
+  // Used as fallback when dataTransfer.getData() returns '' on mobile.
+  const [dragPayload, setDragPayload] = useState(null);
   // Accumulated score
   const [score, setScore]           = useState(0);
   // Trash uses remaining (starts at 10)
@@ -32,8 +35,8 @@ function App() {
     setQueue(prev => [...prev.slice(1), randomTile()]);
 
   /* ── Drag handlers ─────────────────────────────── */
-  const handleDragStart = () => setIsDragging(true);
-  const handleDragEnd   = () => setIsDragging(false);
+  const handleDragStart = (payload) => { setIsDragging(true); setDragPayload(payload); };
+  const handleDragEnd   = () => { setIsDragging(false); setDragPayload(null); };
 
   /* ── Drop handlers ─────────────────────────────── */
 
@@ -107,6 +110,7 @@ function App() {
           score={score}
           level={level}
           isDragging={isDragging}
+          dragPayload={dragPayload}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
           onDropOnCell={handleDropOnCell}
@@ -116,6 +120,7 @@ function App() {
           keepTile={keepTile}
           trashCount={trashCount}
           isDragging={isDragging}
+          dragPayload={dragPayload}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
           onDropOnKeep={handleDropOnKeep}

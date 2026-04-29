@@ -2,7 +2,7 @@ import catImg   from '../assets/images/cat.png';
 import badgeImg from '../assets/images/levels_score.png';
 import { getTileImage } from '../game/tileUtils';
 
-const Grid = ({ grid, score, level, isDragging, onDragStart, onDragEnd, onDropOnCell }) => {
+const Grid = ({ grid, score, level, isDragging, dragPayload, onDragStart, onDragEnd, onDropOnCell }) => {
   return (
     <div className="grid-wrapper">
 
@@ -40,10 +40,9 @@ const Grid = ({ grid, score, level, isDragging, onDragStart, onDragEnd, onDropOn
                 e.preventDefault();
                 if (!isEmpty) return;
                 try {
-                  const { value, source } = JSON.parse(
-                    e.dataTransfer.getData('application/json')
-                  );
-                  onDropOnCell(i, value, source);
+                  const raw = e.dataTransfer.getData('application/json');
+                  const { value, source } = raw ? JSON.parse(raw) : (dragPayload ?? {});
+                  if (value != null && source != null) onDropOnCell(i, value, source);
                 } catch {
                   // malformed dataTransfer — ignore
                 }

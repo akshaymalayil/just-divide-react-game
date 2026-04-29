@@ -6,6 +6,7 @@ const SidePanel = ({
   keepTile,
   trashCount,
   isDragging,
+  dragPayload,
   onDragStart,
   onDragEnd,
   onDropOnKeep,
@@ -43,7 +44,7 @@ const SidePanel = ({
                 'application/json',
                 JSON.stringify({ value: keepTile, source: 'keep' })
               );
-              onDragStart();
+              onDragStart({ value: keepTile, source: 'keep' });
             } : undefined}
             onDragEnd={keepTile ? onDragEnd : undefined}
           >
@@ -64,8 +65,8 @@ const SidePanel = ({
             e.preventDefault();
             if (!trashAvailable) return;
             try {
-              const { source } = JSON.parse(e.dataTransfer.getData('application/json'));
-              // Only trash queue tiles — KEEP tile cannot be trashed
+              const raw = e.dataTransfer.getData('application/json');
+              const { source } = raw ? JSON.parse(raw) : (dragPayload ?? {});
               if (source === 'queue') onDropOnTrash();
             } catch { /* ignore malformed dataTransfer */ }
           }}
@@ -97,7 +98,7 @@ const SidePanel = ({
               'application/json',
               JSON.stringify({ value: active, source: 'queue' })
             );
-            onDragStart();
+            onDragStart({ value: active, source: 'queue' });
           }}
           onDragEnd={onDragEnd}
         >
