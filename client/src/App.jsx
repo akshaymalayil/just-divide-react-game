@@ -21,10 +21,6 @@ function App() {
   const [trashCount, setTrashCount] = useState(10);
   // Game Over flag
   const [isGameOver, setIsGameOver] = useState(false);
-  // Best score — persisted across sessions
-  const [bestScore, setBestScore]   = useState(
-    () => parseInt(localStorage.getItem('justdivide_best') || '0', 10)
-  );
 
   // Level is purely derived from score 
   const level = Math.floor(score / 10) + 1;
@@ -57,14 +53,7 @@ function App() {
     // 2. Apply chain merge and collect score
     const { grid: mergedGrid, scoreGained } = applyMerge(newGrid, index);
     setGrid(mergedGrid);
-
-    // Update score and persist best score if beaten
-    const newScore = score + scoreGained;
-    setScore(newScore);
-    if (newScore > bestScore) {
-      setBestScore(newScore);
-      localStorage.setItem('justdivide_best', String(newScore));
-    }
+    setScore(prev => prev + scoreGained);
 
     // 3. Route post-drop action by source
     if (source === 'queue') {
@@ -108,9 +97,9 @@ function App() {
   return (
     <div className="app">
       {isGameOver && (
-        <GameOver score={score} level={level} bestScore={bestScore} onRestart={handleRestart} />
+        <GameOver score={score} level={level} onRestart={handleRestart} />
       )}
-      <Header bestScore={bestScore} />
+      <Header />
 
       <div className="game-area">
         <Grid
@@ -132,11 +121,6 @@ function App() {
           onDropOnKeep={handleDropOnKeep}
           onDropOnTrash={handleDropOnTrash}
         />
-      </div>
-
-      {/* ── BEST SCORE — always visible below the game area ── */}
-      <div className="best-score-footer">
-        🏆 BEST SCORE: <strong>{bestScore}</strong>
       </div>
     </div>
   );
