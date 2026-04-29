@@ -20,7 +20,7 @@ const SidePanel = ({
       {/* ── ORANGE PANEL (KEEP + TRASH) ── */}
       <div className="side-panel">
 
-        {/* KEEP — drop target */}
+        {/* KEEP — drop target; tile is also draggable back to the grid */}
         <div
           className={`keep-section${isDragging ? ' slot--droppable' : ''}`}
           onDragOver={e => e.preventDefault()}
@@ -28,11 +28,19 @@ const SidePanel = ({
         >
           <div
             className="slot-bg"
+            draggable={!!keepTile}
             style={{
-              backgroundImage: keepTile
-                ? `url(${getTileImage(keepTile)})`
-                : 'none',
+              backgroundImage: keepTile ? `url(${getTileImage(keepTile)})` : 'none',
+              cursor: keepTile ? 'grab' : 'default',
             }}
+            onDragStart={keepTile ? e => {
+              e.dataTransfer.setData(
+                'application/json',
+                JSON.stringify({ value: keepTile, source: 'keep' })
+              );
+              onDragStart();
+            } : undefined}
+            onDragEnd={keepTile ? onDragEnd : undefined}
           >
             {keepTile && <span className="slot-value">{keepTile}</span>}
           </div>
@@ -63,7 +71,7 @@ const SidePanel = ({
       {/* ── QUEUE: active tile (big, draggable) + 2 upcoming (smaller) ── */}
       <div className="queue-section">
 
-        {/* Active tile — the only draggable element */}
+        {/* Active tile — draggable from queue */}
         <div
           className="queue-tile queue-tile--active"
           draggable
@@ -71,7 +79,13 @@ const SidePanel = ({
             backgroundImage: `url(${getTileImage(active)})`,
             cursor: 'grab',
           }}
-          onDragStart={onDragStart}
+          onDragStart={e => {
+            e.dataTransfer.setData(
+              'application/json',
+              JSON.stringify({ value: active, source: 'queue' })
+            );
+            onDragStart();
+          }}
           onDragEnd={onDragEnd}
         >
           {active}

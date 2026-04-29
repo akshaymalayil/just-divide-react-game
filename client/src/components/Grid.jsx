@@ -38,7 +38,15 @@ const Grid = ({ grid, score, isDragging, onDragStart, onDragEnd, onDropOnCell })
               onDragOver={e => { if (isEmpty) e.preventDefault(); }}
               onDrop={e => {
                 e.preventDefault();
-                if (isEmpty) onDropOnCell(i);
+                if (!isEmpty) return;
+                try {
+                  const { value, source } = JSON.parse(
+                    e.dataTransfer.getData('application/json')
+                  );
+                  onDropOnCell(i, value, source);
+                } catch {
+                  // malformed dataTransfer — ignore
+                }
               }}
             >
               {/* Render tile when cell is filled */}

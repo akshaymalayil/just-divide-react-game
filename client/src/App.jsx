@@ -31,20 +31,31 @@ function App() {
 
   /* ── Drop handlers ─────────────────────────────── */
 
-  /** Drop onto an empty grid cell */
-  const handleDropOnCell = (index) => {
+  /**
+   * Drop onto an empty grid cell.
+   * @param {number} index  - target cell index
+   * @param {number} value  - tile value from dataTransfer
+   * @param {string} source - 'queue' | 'keep'
+   */
+  const handleDropOnCell = (index, value, source) => {
     if (grid[index] !== null) return; // already filled — reject
 
     // 1. Place the tile
     let newGrid = [...grid];
-    newGrid[index] = activeTile;
+    newGrid[index] = value;
 
     // 2. Apply chain merge and collect score
     const { grid: mergedGrid, scoreGained } = applyMerge(newGrid, index);
-
     setGrid(mergedGrid);
     setScore(prev => prev + scoreGained);
-    advanceQueue();
+
+    // 3. Route post-drop action by source
+    if (source === 'queue') {
+      advanceQueue();         // discard used tile, add new one to queue end
+    } else if (source === 'keep') {
+      setKeepTile(null);      // clear the keep slot
+    }
+
     setIsDragging(false);
   };
 
