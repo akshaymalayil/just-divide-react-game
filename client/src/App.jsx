@@ -2,8 +2,9 @@ import { useState } from 'react';
 import Header from './components/Header';
 import Grid from './components/Grid';
 import SidePanel from './components/SidePanel';
+import GameOver from './components/GameOver';
 import './styles/global.css';
-import { randomTile, initQueue, applyMerge } from './game/tileUtils';
+import { randomTile, initQueue, applyMerge, hasMovesLeft } from './game/tileUtils';
 
 function App() {
   // 4×4 grid: null = empty cell
@@ -18,6 +19,8 @@ function App() {
   const [score, setScore]           = useState(0);
   // Trash uses remaining (starts at 10)
   const [trashCount, setTrashCount] = useState(10);
+  // Game Over flag
+  const [isGameOver, setIsGameOver] = useState(false);
 
   // Level is purely derived from score 
   const level = Math.floor(score / 10) + 1;
@@ -59,6 +62,9 @@ function App() {
       setKeepTile(null);      // clear the keep slot
     }
 
+    // 4. Check for game over on the updated grid
+    if (!hasMovesLeft(mergedGrid)) setIsGameOver(true);
+
     setIsDragging(false);
   };
 
@@ -78,8 +84,21 @@ function App() {
     setIsDragging(false);
   };
 
+  /** Reset all game state to start a new game */
+  const handleRestart = () => {
+    setGrid(Array(16).fill(null));
+    setQueue(initQueue(3));
+    setKeepTile(null);
+    setScore(0);
+    setTrashCount(10);
+    setIsGameOver(false);
+  };
+
   return (
     <div className="app">
+      {isGameOver && (
+        <GameOver score={score} level={level} onRestart={handleRestart} />
+      )}
       <Header />
 
       <div className="game-area">

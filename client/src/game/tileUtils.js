@@ -155,3 +155,29 @@ export function applyMerge(grid, index) {
   return { grid: next, scoreGained };
 }
 
+/**
+ * Returns true if at least one move is still possible:
+ *   - There is an empty cell (a tile can be placed), OR
+ *   - Any two adjacent non-null cells can merge via tryMerge.
+ *
+ * Returns false → grid is full AND no adjacent merges exist → Game Over.
+ *
+ * @param {Array} grid  current 16-element grid array
+ * @returns {boolean}
+ */
+export function hasMovesLeft(grid) {
+  // Fast path: any empty cell allows placement
+  if (grid.some(cell => cell === null)) return true;
+
+  // Slow path: scan every cell's neighbours for a valid merge
+  for (let i = 0; i < 16; i++) {
+    for (const j of getNeighbors(i)) {
+      if (j === null) continue;
+      if (tryMerge(grid[i], grid[j])) return true;
+    }
+  }
+
+  return false; // grid is full and no merge is possible
+}
+
+
