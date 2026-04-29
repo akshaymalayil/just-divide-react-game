@@ -1,66 +1,247 @@
-:root
-{
-    --cell-size:100px;
+/* ============================================================
+   DESIGN TOKENS  —  desktop defaults
+   ============================================================ */
+:root {
+  --cell-size:         100px;
+  --grid-col-size:     calc(var(--cell-size) + 10px);
+  --grid-gap:          14px;
+  --grid-pad-top:      50px;
+  --grid-pad-side:     20px;
+
+  --cat-size:          300px;
+  --top-bar-offset:    -60px;
+  --badge-w:           170px;
+  --badge-h:           70px;
+  --badge-font:        16px;
+  --badge-drop:        40px;
+
+  --panel-w:           calc(var(--cell-size) + 20px);
+  --panel-h:           460px;
+  --panel-pad:         20px;
+  --panel-border:      10px;
+
+  --game-gap:          60px;
+  --game-mt:           100px;
+
+  --title-size:        2rem;
+  --timer-size:        1.1rem;
+  --subtitle-size:     1rem;
+  --queue-tile-font:   18px;
+  --trash-count-top:   35px;
+
+  --bg-image:          url('../assets/images/bg_desktop.png');
 }
 
-/* 🔥 RESET */
+/* ============================================================
+   SMALL LANDSCAPE  (phones & small tablets in landscape)
+   max-width: 900px  +  landscape
+   ============================================================ */
+@media (orientation: landscape) and (max-width: 900px) {
+  :root {
+    --cell-size:         68px;
+    --grid-gap:          8px;
+    --grid-pad-top:      34px;
+    --grid-pad-side:     12px;
+
+    --cat-size:          200px;
+    --top-bar-offset:    -40px;
+    --badge-w:           116px;
+    --badge-h:           48px;
+    --badge-font:        12px;
+    --badge-drop:        26px;
+
+    --panel-w:           calc(var(--cell-size) + 14px);
+    --panel-h:           310px;
+    --panel-pad:         12px;
+    --panel-border:      7px;
+
+    --game-gap:          28px;
+    --game-mt:           60px;
+
+    --title-size:        1.3rem;
+    --timer-size:        0.9rem;
+    --subtitle-size:     0.78rem;
+    --queue-tile-font:   14px;
+    --trash-count-top:   22px;
+
+    --bg-image:          url('../assets/images/bg_landscape.png');
+  }
+}
+
+/* ============================================================
+   MEDIUM LANDSCAPE  (tablets in landscape, 901-1199px)
+   ============================================================ */
+@media (orientation: landscape) and (min-width: 901px) and (max-width: 1199px) {
+  :root {
+    --cell-size:         82px;
+    --grid-gap:          11px;
+    --grid-pad-top:      42px;
+    --grid-pad-side:     16px;
+
+    --cat-size:          245px;
+    --top-bar-offset:    -50px;
+    --badge-w:           138px;
+    --badge-h:           58px;
+    --badge-font:        14px;
+    --badge-drop:        33px;
+
+    --panel-w:           calc(var(--cell-size) + 16px);
+    --panel-h:           380px;
+    --panel-pad:         16px;
+    --panel-border:      8px;
+
+    --game-gap:          44px;
+    --game-mt:           80px;
+
+    --title-size:        1.65rem;
+    --timer-size:        1rem;
+    --subtitle-size:     0.88rem;
+    --queue-tile-font:   16px;
+    --trash-count-top:   28px;
+
+    --bg-image:          url('../assets/images/bg_landscape.png');
+  }
+}
+
+/* ============================================================
+   PORTRAIT  (phones & tablets held upright)
+   ============================================================ */
+@media (orientation: portrait) {
+  :root {
+    --cell-size:         64px;
+    --grid-gap:          8px;
+    --grid-pad-top:      32px;
+    --grid-pad-side:     12px;
+
+    --cat-size:          190px;
+    --top-bar-offset:    -38px;
+    --badge-w:           106px;
+    --badge-h:           44px;
+    --badge-font:        11px;
+    --badge-drop:        24px;
+
+    /* panel becomes a horizontal bar in portrait */
+    --panel-w:           auto;
+    --panel-h:           auto;
+    --panel-pad:         12px;
+    --panel-border:      7px;
+
+    --game-gap:          20px;
+    --game-mt:           60px;
+
+    --title-size:        1.25rem;
+    --timer-size:        0.88rem;
+    --subtitle-size:     0.76rem;
+    --queue-tile-font:   13px;
+    --trash-count-top:   20px;
+
+    --bg-image:          url('../assets/images/bg_portrait.png');
+  }
+}
+
+/* ============================================================
+   BASE RESET
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: url('../assets/images/bg_desktop.png');
+  background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   text-align: center;
+  min-height: 100vh;
 }
 
-/* 🔥 GRID WRAPPER */
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  padding-top: 10px;
+}
+
+.title {
+  font-size: var(--title-size);
+  margin: 0 0 4px;
+  font-weight: 900;
+}
+
+.timer {
+  font-size: var(--timer-size);
+  margin: 2px 0;
+}
+
+.subtitle {
+  font-size: var(--subtitle-size);
+  margin: 2px 0 0;
+  font-weight: bold;
+  color: #d94f00;
+}
+
+/* ============================================================
+   GAME AREA
+   ============================================================ */
+.game-area {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--game-gap);
+  margin-top: var(--game-mt);
+  padding-bottom: 40px;
+}
+
+/* Stack vertically in portrait */
+@media (orientation: portrait) {
+  .game-area {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+   GRID WRAPPER
+   ============================================================ */
 .grid-wrapper {
-  margin-top: 10px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 
-/* 🔥 TOP BAR (cat + badges) */
+/* ============================================================
+   TOP BAR  (cat + level/score badges)
+   ============================================================ */
 .top-bar {
-  
   position: absolute;
-  top: -60px;   /* push above grid */
+  top: var(--top-bar-offset);
   display: flex;
   align-items: center;
-  gap: 0px;
+  gap: 0;
   z-index: 2;
-  
 }
 
-/* 🐱 Cat */
 .cat-img {
-  width: 300px;
+  width: var(--cat-size);
+  display: block;
 }
-/* .catImg
-{
-  width: 700px;
-  position: absolute;
-  top: -90px;
-  left: -166px;
-} */
-/* 🔴 Badge container */
+
 .badge-box {
   position: relative;
-  top: 40px;
-  width: 170px;
-  height: 70px;
+  top: var(--badge-drop);
+  width: var(--badge-w);
+  height: var(--badge-h);
+  flex-shrink: 0;
 }
 
-/* Badge image */
 .badge-img {
   width: 100%;
   height: 100%;
 }
 
-/* Badge text */
 .badge-box span {
   position: absolute;
   top: 50%;
@@ -68,149 +249,158 @@ body {
   transform: translate(-50%, -50%);
   font-weight: bold;
   color: white;
-  font-size: 16px;
+  font-size: var(--badge-font);
+  white-space: nowrap;
 }
 
-/* 🔷 GRID */
+/* ============================================================
+   GRID
+   ============================================================ */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 110px);   /* bigger */
-  gap: 14px;
+  grid-template-columns: repeat(4, var(--grid-col-size));
+  gap: var(--grid-gap);
   background: #1f8f97;
-  padding: 50px 20px 20px;   /* more top space for cat */
+  padding: var(--grid-pad-top) var(--grid-pad-side) var(--grid-pad-side);
   border-radius: 25px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
-/* 🧊 CELL */
+/* ============================================================
+   CELL
+   ============================================================ */
 .cell {
   width: var(--cell-size);
   height: var(--cell-size);
   background: #0e6f75;
   border-radius: 14px;
-  border: 3px solid rgba(255,255,255,0.6);
-  box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* 🎯 GAME AREA (center layout) */
-.game-area {
+/* ============================================================
+   SIDE CONTAINER  (positions the queue absolutely)
+   ============================================================ */
+.side {
+  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 80px;
-  margin-top: 40px;
+  flex-direction: column;
+  align-items: center;
 }
 
-
-
-
-/* 🔥 SIDE PANEL CONTAINER */
+/* ============================================================
+   SIDE PANEL  (orange box)
+   ============================================================ */
 .side-panel {
-  width: calc(var(--cell-size));
-  height: 450px;
+  width: var(--panel-w);
+  height: var(--panel-h);
   background: linear-gradient(#f6c46b, #e59a3a);
   border-radius: 25px;
-  padding: 25px 20px;
+  padding: var(--panel-pad);
+  border: solid var(--panel-border) rgb(206, 83, 21);
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-
-  border: solid 10px rgb(206, 83, 21);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* 🔼 KEEP SECTION */
+/* Portrait: panel becomes horizontal strip */
+@media (orientation: portrait) {
+  .side-panel {
+    flex-direction: row;
+    gap: 16px;
+    padding: var(--panel-pad) 20px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+   KEEP SECTION
+   ============================================================ */
 .keep-section {
   position: relative;
-  width: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
+/* ============================================================
+   SLOT (keep & trash tile)
+   ============================================================ */
 .slot-bg {
-  border: 5px solid rgba(255,255,255,0.6);
+  border: 5px solid rgba(255, 255, 255, 0.6);
   border-radius: 14px;
   width: var(--cell-size);
   height: var(--cell-size);
   object-fit: contain;
-
   background-size: cover;
- 
+  display: block;
 }
 
 .slot-label {
-  position: absolute;
-  bottom: -18px;
-  left: 50%;
-  transform: translateX(-50%);
   font-weight: bold;
   color: #0e6f75;
+  font-size: calc(var(--badge-font) - 1px);
 }
 
-/* 🔁 QUEUE */
+/* ============================================================
+   QUEUE SECTION  (two tiles side-by-side, inside side-panel)
+   ============================================================ */
 .queue-section {
-  /* width: var(--cell-size)+10px; */
-
   display: flex;
-  gap: 10px;
+  gap: 8px;
   background: #eaeaea;
   padding: 8px;
   border-radius: 12px;
-  box-shadow: inset 0 3px 6px rgba(0,0,0,0.2);
-
-  position: absolute;
-  top: 0;
-  transform: translate(-15%, 320%); 
-  
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* 🎲 QUEUE TILE */
+/* ============================================================
+   QUEUE TILE
+   ============================================================ */
 .queue-tile {
   width: var(--cell-size);
   height: var(--cell-size);
-  border: 3px solid rgba(255,255,255,0.6);
+  border: 3px solid rgba(255, 255, 255, 0.6);
   border-radius: 10px;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   font-weight: bold;
-  font-size: 18px;
+  font-size: var(--queue-tile-font);
   color: white;
-
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-size: cover;
+  background-position: center;
 }
 
-.queue-tile.left {
-  
-  background-size: contain;
-}
-
-.queue-tile.right {
-  
-  background-size: contain;
-}
-
-/* 🗑️ TRASH SECTION */
+/* ============================================================
+   TRASH SECTION
+   ============================================================ */
 .trash-section {
   position: relative;
-  width: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .trash-count {
   position: absolute;
-  top: 35px;
+  top: var(--trash-count-top);
   left: 50%;
   transform: translateX(-50%);
   font-weight: bold;
   color: white;
   background: red;
-  padding: 3px 8px;
+  padding: 2px 6px;
   border-radius: 8px;
-} 
-
-
+  font-size: calc(var(--badge-font) - 2px);
+}
