@@ -1,6 +1,9 @@
 /* ============================================================
    DESIGN TOKENS  —  desktop defaults
+   1440 × 1024 reference design space
    ============================================================ */
+html, body { height: 100%; }
+
 :root {
   --cell-size:         100px;
   --grid-col-size:     calc(var(--cell-size) + 10px);
@@ -16,7 +19,7 @@
   --badge-drop:        40px;
 
   --panel-w:           calc(var(--cell-size) + 20px);
-  --panel-h:           460px;
+  --panel-h:           520px;
   --panel-pad:         20px;
   --panel-border:      10px;
 
@@ -27,6 +30,8 @@
   --timer-size:        1.1rem;
   --subtitle-size:     1rem;
   --queue-tile-font:   18px;
+  --queue-next-size:   62px;
+  --queue-next-font:   13px;
   --trash-count-top:   35px;
 
   --bg-image:          url('../assets/images/bg_desktop.png');
@@ -62,6 +67,8 @@
     --timer-size:        0.9rem;
     --subtitle-size:     0.78rem;
     --queue-tile-font:   14px;
+    --queue-next-size:   46px;
+    --queue-next-font:   10px;
     --trash-count-top:   22px;
 
     --bg-image:          url('../assets/images/bg_landscape.png');
@@ -97,6 +104,8 @@
     --timer-size:        1rem;
     --subtitle-size:     0.88rem;
     --queue-tile-font:   16px;
+    --queue-next-size:   52px;
+    --queue-next-font:   11px;
     --trash-count-top:   28px;
 
     --bg-image:          url('../assets/images/bg_landscape.png');
@@ -133,6 +142,8 @@
     --timer-size:        0.88rem;
     --subtitle-size:     0.76rem;
     --queue-tile-font:   13px;
+    --queue-next-size:   42px;
+    --queue-next-font:   10px;
     --trash-count-top:   20px;
 
     --bg-image:          url('../assets/images/bg_portrait.png');
@@ -350,34 +361,79 @@ body {
 }
 
 /* ============================================================
-   QUEUE SECTION  (two tiles side-by-side, inside side-panel)
+   QUEUE SECTION
+   Active tile (big, left) + 2 smaller upcoming tiles (right).
+   Absolutely centered over the orange panel.
+   Portrait: static, sits beside the panel.
    ============================================================ */
 .queue-section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+
   display: flex;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+
   background: #eaeaea;
   padding: 8px;
   border-radius: 12px;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* ============================================================
-   QUEUE TILE
-   ============================================================ */
+@media (orientation: portrait) {
+  .queue-section {
+    position: static;
+    transform: none;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Base tile shared styles */
 .queue-tile {
-  width: var(--cell-size);
-  height: var(--cell-size);
   border: 3px solid rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  font-size: var(--queue-tile-font);
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   background-size: cover;
   background-position: center;
+  flex-shrink: 0;
+}
+
+/* Active (draggable) tile — full cell size */
+.queue-tile--active {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  font-size: var(--queue-tile-font);
+}
+
+/* Column holding the 2 smaller upcoming tiles */
+.queue-upcoming {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@media (orientation: portrait) {
+  .queue-upcoming {
+    flex-direction: row;
+  }
+}
+
+/* Smaller upcoming tiles */
+.queue-tile--next {
+  width: var(--queue-next-size);
+  height: var(--queue-next-size);
+  font-size: var(--queue-next-font);
+  opacity: 0.85;
 }
 
 /* ============================================================
