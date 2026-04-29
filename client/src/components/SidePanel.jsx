@@ -4,6 +4,7 @@ import redTile from '../assets/images/red.png';
 const SidePanel = ({
   queue,
   keepTile,
+  trashCount,
   isDragging,
   onDragStart,
   onDragEnd,
@@ -11,6 +12,7 @@ const SidePanel = ({
   onDropOnTrash,
 }) => {
   const [active, ...upcoming] = queue;
+  const trashAvailable = trashCount > 0;
 
   return (
     <div className="side">
@@ -37,18 +39,22 @@ const SidePanel = ({
           <div className="slot-label">KEEP</div>
         </div>
 
-        {/* TRASH — drop target */}
+        {/* TRASH — drop target, disabled when trashCount === 0 */}
         <div
-          className={`trash-section${isDragging ? ' slot--droppable' : ''}`}
-          onDragOver={e => e.preventDefault()}
-          onDrop={e => { e.preventDefault(); onDropOnTrash(); }}
+          className={[
+            'trash-section',
+            isDragging && trashAvailable ? 'slot--droppable' : '',
+            !trashAvailable              ? 'trash--empty'    : '',
+          ].join(' ').trim()}
+          onDragOver={e => { if (trashAvailable) e.preventDefault(); }}
+          onDrop={e => { e.preventDefault(); if (trashAvailable) onDropOnTrash(); }}
         >
           <div className="slot-label">TRASH</div>
           <div
             className="slot-bg"
             style={{ backgroundImage: `url(${redTile})` }}
           >
-            <div className="trash-count">x10</div>
+            <div className="trash-count">x{trashCount}</div>
           </div>
         </div>
 

@@ -15,7 +15,9 @@ function App() {
   // Tracks whether the active tile is currently being dragged
   const [isDragging, setIsDragging] = useState(false);
   // Accumulated score
-  const [score, setScore]       = useState(0);
+  const [score, setScore]           = useState(0);
+  // Trash uses remaining (starts at 10)
+  const [trashCount, setTrashCount] = useState(10);
 
   const activeTile = queue[0];
 
@@ -53,9 +55,11 @@ function App() {
     setIsDragging(false);
   };
 
-  /** Drop onto the TRASH slot */
+  /** Drop onto the TRASH slot — blocked when trashCount reaches 0 */
   const handleDropOnTrash = () => {
-    advanceQueue();          // discard — no state stored
+    if (trashCount <= 0) return;       // trash is exhausted
+    setTrashCount(prev => prev - 1);
+    advanceQueue();                    // discard active tile
     setIsDragging(false);
   };
 
@@ -75,6 +79,7 @@ function App() {
         <SidePanel
           queue={queue}
           keepTile={keepTile}
+          trashCount={trashCount}
           isDragging={isDragging}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}

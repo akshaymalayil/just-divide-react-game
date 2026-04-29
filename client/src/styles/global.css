@@ -520,3 +520,13 @@ body {
   cursor: grabbing;
   opacity: 0.75;
 }
+
+/* Trash slot when all uses are exhausted */
+.trash--empty {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(60%);
+}
+.trash--empty .slot-bg {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
