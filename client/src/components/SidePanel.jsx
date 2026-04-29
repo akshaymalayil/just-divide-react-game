@@ -13,6 +13,7 @@ const SidePanel = ({
 }) => {
   const [active, ...upcoming] = queue;
   const trashAvailable = trashCount > 0;
+  const keepFull       = keepTile !== null;  // slot is occupied
 
   return (
     <div className="side">
@@ -22,9 +23,13 @@ const SidePanel = ({
 
         {/* KEEP — drop target; tile is also draggable back to the grid */}
         <div
-          className={`keep-section${isDragging ? ' slot--droppable' : ''}`}
-          onDragOver={e => e.preventDefault()}
-          onDrop={e => { e.preventDefault(); onDropOnKeep(); }}
+          className={[
+            'keep-section',
+            isDragging && !keepFull ? 'slot--droppable' : '',
+            keepFull                ? 'keep--full'       : '',
+          ].join(' ').trim()}
+          onDragOver={e => { if (!keepFull) e.preventDefault(); }}
+          onDrop={e => { e.preventDefault(); if (!keepFull) onDropOnKeep(); }}
         >
           <div
             className="slot-bg"

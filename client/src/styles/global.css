@@ -530,3 +530,14 @@ body {
 .trash--empty .slot-bg {
   border-color: rgba(255, 255, 255, 0.2) !important;
 }
+
+/* KEEP slot when already holding a tile — blocks new drops */
+.keep--full {
+  cursor: not-allowed;
+}
+.keep--full .slot-bg {
+  /* tile is still draggable out, so no grayscale — just no glow */
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: none !important;
+}
+

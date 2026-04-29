@@ -59,8 +59,9 @@ function App() {
     setIsDragging(false);
   };
 
-  /** Drop onto the KEEP slot */
+  /** Drop onto the KEEP slot — only accepted when the slot is empty */
   const handleDropOnKeep = () => {
+    if (keepTile !== null) return;   // slot occupied — reject
     setKeepTile(activeTile);
     advanceQueue();
     setIsDragging(false);
