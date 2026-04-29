@@ -109,7 +109,7 @@ export function tryMerge(a, b) {
  */
 export function applyMerge(grid, index) {
   const next = [...grid];
-
+  let scoreGained = 0;       // ← accumulated score for this placement
   let mergedThisRound;
 
   do {
@@ -122,8 +122,24 @@ export function applyMerge(grid, index) {
       if (neighborIdx === null)       continue; // out of bounds
       if (next[neighborIdx] === null) continue; // empty neighbour
 
-      const merged = tryMerge(next[index], next[neighborIdx]);
+      const a = next[index];
+      const b = next[neighborIdx];
+
+      const merged = tryMerge(a, b);
       if (!merged) continue;
+
+      // ── Score calculation (pre-merge values, tryMerge untouched) ──
+      if (a === b) {
+        // Rule 1: equal tiles — both vanish, score = value of one tile
+        scoreGained += a;
+        console.log(scoreGained)
+      } else {
+        // Rule 2 & 3: division — score = result (1 also awards 1 point)
+        const larger  = a > b ? a : b;
+        const smaller = a > b ? b : a;
+        scoreGained += larger / smaller;
+        console.log(scoreGained)
+      }
 
       // Apply the merge
       next[index]       = merged.aVal;
@@ -136,7 +152,6 @@ export function applyMerge(grid, index) {
 
   } while (mergedThisRound);
 
-  return next;
+  return { grid: next, scoreGained };
 }
-
 

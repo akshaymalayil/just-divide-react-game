@@ -14,6 +14,8 @@ function App() {
   const [keepTile, setKeepTile] = useState(null);
   // Tracks whether the active tile is currently being dragged
   const [isDragging, setIsDragging] = useState(false);
+  // Accumulated score
+  const [score, setScore]       = useState(0);
 
   const activeTile = queue[0];
 
@@ -35,10 +37,11 @@ function App() {
     let newGrid = [...grid];
     newGrid[index] = activeTile;
 
-    // 2. Apply one pass of merge logic against immediate neighbours
-    newGrid = applyMerge(newGrid, index);
+    // 2. Apply chain merge and collect score
+    const { grid: mergedGrid, scoreGained } = applyMerge(newGrid, index);
 
-    setGrid(newGrid);
+    setGrid(mergedGrid);
+    setScore(prev => prev + scoreGained);
     advanceQueue();
     setIsDragging(false);
   };
@@ -63,6 +66,7 @@ function App() {
       <div className="game-area">
         <Grid
           grid={grid}
+          score={score}
           isDragging={isDragging}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
