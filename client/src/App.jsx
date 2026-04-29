@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Grid from './components/Grid';
 import SidePanel from './components/SidePanel';
 import './styles/global.css';
-import { randomTile, initQueue } from './game/tileUtils';
+import { randomTile, initQueue, applyMerge } from './game/tileUtils';
 
 function App() {
   // 4×4 grid: null = empty cell
@@ -30,8 +30,14 @@ function App() {
   /** Drop onto an empty grid cell */
   const handleDropOnCell = (index) => {
     if (grid[index] !== null) return; // already filled — reject
-    const newGrid = [...grid];
+
+    // 1. Place the tile
+    let newGrid = [...grid];
     newGrid[index] = activeTile;
+
+    // 2. Apply one pass of merge logic against immediate neighbours
+    newGrid = applyMerge(newGrid, index);
+
     setGrid(newGrid);
     advanceQueue();
     setIsDragging(false);
