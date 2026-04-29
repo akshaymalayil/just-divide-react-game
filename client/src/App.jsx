@@ -19,6 +19,9 @@ function App() {
   // Trash uses remaining (starts at 10)
   const [trashCount, setTrashCount] = useState(10);
 
+  // Level is purely derived from score 
+  const level = Math.floor(score / 10) + 1;
+
   const activeTile = queue[0];
 
   /** Replace queue[0] with a new random tile at the end */
@@ -83,6 +86,7 @@ function App() {
         <Grid
           grid={grid}
           score={score}
+          level={level}
           isDragging={isDragging}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}

@@ -2,7 +2,7 @@ import catImg   from '../assets/images/cat.png';
 import badgeImg from '../assets/images/levels_score.png';
 import { getTileImage } from '../game/tileUtils';
 
-const Grid = ({ grid, score, isDragging, onDragStart, onDragEnd, onDropOnCell }) => {
+const Grid = ({ grid, score, level, isDragging, onDragStart, onDragEnd, onDropOnCell }) => {
   return (
     <div className="grid-wrapper">
 
@@ -10,7 +10,7 @@ const Grid = ({ grid, score, isDragging, onDragStart, onDragEnd, onDropOnCell })
       <div className="top-bar">
         <div className="badge-box" id="level">
           <img src={badgeImg} className="badge-img" alt="" />
-          <span>LEVEL 1</span>
+          <span>LEVEL {level}</span>
         </div>
 
         <img src={catImg} alt="cat" className="cat-img" />
