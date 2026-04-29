@@ -1,31 +1,58 @@
-import catImg from '../assets/images/cat.png';
+import catImg   from '../assets/images/cat.png';
 import badgeImg from '../assets/images/levels_score.png';
+import { getTileImage } from '../game/tileUtils';
 
-const Grid = () => {
+const Grid = ({ grid, isDragging, onDragStart, onDragEnd, onDropOnCell }) => {
   return (
     <div className="grid-wrapper">
-      
-      {/* 🔥 TOP BAR */}
+
+      {/* ── TOP BAR: cat + level/score badges ── */}
       <div className="top-bar">
-        <div className="badge-box" id='level'>
-          <img src={badgeImg} className="badge-img" />
+        <div className="badge-box" id="level">
+          <img src={badgeImg} className="badge-img" alt="" />
           <span>LEVEL 1</span>
         </div>
 
-        {/* <img src={catImg} alt="cat"  className='catImg'/> */}
         <img src={catImg} alt="cat" className="cat-img" />
 
-        <div className="badge-box" id='score'>
-          <img src={badgeImg} className="badge-img" />
+        <div className="badge-box" id="score">
+          <img src={badgeImg} className="badge-img" alt="" />
           <span>SCORE 40</span>
         </div>
       </div>
 
-      {/* 🔷 GRID */}
+      {/* ── 4×4 GRID ── */}
       <div className="grid">
-        {Array(16).fill(null).map((_, i) => (
-          <div key={i} className="cell"></div>
-        ))}
+        {grid.map((cell, i) => {
+          const isEmpty   = cell === null;
+          const canDrop   = isDragging && isEmpty;
+
+          return (
+            <div
+              key={i}
+              className={[
+                'cell',
+                !isEmpty  ? 'cell--filled'    : '',
+                canDrop   ? 'cell--droppable' : '',
+              ].join(' ').trim()}
+              onDragOver={e => { if (isEmpty) e.preventDefault(); }}
+              onDrop={e => {
+                e.preventDefault();
+                if (isEmpty) onDropOnCell(i);
+              }}
+            >
+              {/* Render tile when cell is filled */}
+              {!isEmpty && (
+                <div
+                  className="cell-tile"
+                  style={{ backgroundImage: `url(${getTileImage(cell)})` }}
+                >
+                  {cell}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
     </div>
