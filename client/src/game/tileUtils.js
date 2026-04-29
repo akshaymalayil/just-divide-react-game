@@ -132,13 +132,11 @@ export function applyMerge(grid, index) {
       if (a === b) {
         // Rule 1: equal tiles — both vanish, score = value of one tile
         scoreGained += a;
-        console.log(scoreGained)
       } else {
         // Rule 2 & 3: division — score = result (1 also awards 1 point)
         const larger  = a > b ? a : b;
         const smaller = a > b ? b : a;
         scoreGained += larger / smaller;
-        console.log(scoreGained)
       }
 
       // Apply the merge

@@ -60,7 +60,15 @@ const SidePanel = ({
             !trashAvailable              ? 'trash--empty'    : '',
           ].join(' ').trim()}
           onDragOver={e => { if (trashAvailable) e.preventDefault(); }}
-          onDrop={e => { e.preventDefault(); if (trashAvailable) onDropOnTrash(); }}
+          onDrop={e => {
+            e.preventDefault();
+            if (!trashAvailable) return;
+            try {
+              const { source } = JSON.parse(e.dataTransfer.getData('application/json'));
+              // Only trash queue tiles — KEEP tile cannot be trashed
+              if (source === 'queue') onDropOnTrash();
+            } catch { /* ignore malformed dataTransfer */ }
+          }}
         >
           <div className="slot-label">TRASH</div>
           <div
