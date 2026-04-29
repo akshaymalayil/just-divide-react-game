@@ -1,8 +1,13 @@
 const Header = () => {
   return (
-    <div>
-      <h1>JUST DIVIDE</h1>
-      <p>Divide with the numbers to solve the rows and columns.</p>
+    <div className="header">
+      <h1 className="title">JUST DIVIDE</h1>
+
+      <div className="timer">⏳ 00:07</div>
+
+      <p className="subtitle">
+        Divide with the numbers to solve the rows and columns.
+      </p>
     </div>
   );
 };

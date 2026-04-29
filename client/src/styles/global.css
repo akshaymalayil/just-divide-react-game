@@ -1,24 +1,216 @@
+:root
+{
+    --cell-size:100px;
+}
+
+/* 🔥 RESET */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url('../assets/images/bg_desktop.png');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+}
+
+/* 🔥 GRID WRAPPER */
+.grid-wrapper {
+  margin-top: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+/* 🔥 TOP BAR (cat + badges) */
+.top-bar {
+  
+  position: absolute;
+  top: -60px;   /* push above grid */
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  z-index: 2;
+  
+}
+
+/* 🐱 Cat */
+.cat-img {
+  width: 300px;
+}
+/* .catImg
+{
+  width: 700px;
+  position: absolute;
+  top: -90px;
+  left: -166px;
+} */
+/* 🔴 Badge container */
+.badge-box {
+  position: relative;
+  top: 40px;
+  width: 170px;
+  height: 70px;
+}
+
+/* Badge image */
+.badge-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Badge text */
+.badge-box span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+}
+
+/* 🔷 GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 90px);
-  gap: 12px;
+  grid-template-columns: repeat(4, 110px);   /* bigger */
+  gap: 14px;
   background: #1f8f97;
-  padding: 15px;
-  border-radius: 15px;
+  padding: 50px 20px 20px;   /* more top space for cat */
+  border-radius: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
 }
 
+/* 🧊 CELL */
 .cell {
-  width: 90px;
-  height: 90px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   background: #0e6f75;
-  border-radius: 10px;
-  border: 2px solid #ffffff;
+  border-radius: 14px;
+  border: 3px solid rgba(255,255,255,0.6);
+  box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
 }
 
+/* 🎯 GAME AREA (center layout) */
 .game-area {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 50px;
-  margin-top: 30px;
+  gap: 80px;
+  margin-top: 40px;
 }
+
+
+
+
+/* 🔥 SIDE PANEL CONTAINER */
+.side-panel {
+  width: calc(var(--cell-size));
+  height: 450px;
+  background: linear-gradient(#f6c46b, #e59a3a);
+  border-radius: 25px;
+  padding: 25px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+
+  border: solid 10px rgb(206, 83, 21);
+}
+
+/* 🔼 KEEP SECTION */
+.keep-section {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.slot-bg {
+  border: 5px solid rgba(255,255,255,0.6);
+  border-radius: 14px;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  object-fit: contain;
+
+  background-size: cover;
+ 
+}
+
+.slot-label {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  color: #0e6f75;
+}
+
+/* 🔁 QUEUE */
+.queue-section {
+  /* width: var(--cell-size)+10px; */
+
+  display: flex;
+  gap: 10px;
+  background: #eaeaea;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.2);
+
+  position: absolute;
+  top: 0;
+  transform: translate(-15%, 320%); 
+  
+}
+
+/* 🎲 QUEUE TILE */
+.queue-tile {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 3px solid rgba(255,255,255,0.6);
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: bold;
+  font-size: 18px;
+  color: white;
+
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.queue-tile.left {
+  
+  background-size: contain;
+}
+
+.queue-tile.right {
+  
+  background-size: contain;
+}
+
+/* 🗑️ TRASH SECTION */
+.trash-section {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.trash-count {
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  color: white;
+  background: red;
+  padding: 3px 8px;
+  border-radius: 8px;
+} 
+
+
