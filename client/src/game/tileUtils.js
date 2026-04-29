@@ -93,34 +93,50 @@ export function tryMerge(a, b) {
 }
 
 /**
- * Run one pass of merge checks after placing a tile at `index`.
- * Checks all 4 neighbours left-to-right, top-to-bottom.
- * Stops checking further neighbours if the placed tile is consumed.
- * No recursion — single pass only.
+ * Apply merge logic after placing a tile at `index`, with chain reactions.
+ *
+ * Algorithm (deterministic, no recursion):
+ *   - Loop until a full neighbour pass finds no merge.
+ *   - Each iteration: scan 4 neighbours, apply the FIRST merge found, restart.
+ *   - Stop early if the placed tile is consumed (becomes null).
+ *
+ * This handles chains like: place 12 → merges with 4 → result 3 →
+ *   3 merges with neighbour 3 → both vanish — all in one call.
  *
  * @param {Array}  grid   current 16-element grid array
  * @param {number} index  cell where the new tile was placed
- * @returns {Array} new grid array with merges applied
+ * @returns {Array} new grid array with all chain merges applied
  */
 export function applyMerge(grid, index) {
   const next = [...grid];
 
-  for (const neighborIdx of getNeighbors(index)) {
-    if (neighborIdx === null) continue;
+  let mergedThisRound;
 
-    const a = next[index];
-    const b = next[neighborIdx];
+  do {
+    mergedThisRound = false;
 
-    const merged = tryMerge(a, b);
-    if (!merged) continue;
-
-    next[index]       = merged.aVal;
-    next[neighborIdx] = merged.bVal;
-
-    // If the placed tile was consumed, no point checking remaining neighbours
+    // Placed tile was consumed — nothing left to chain from
     if (next[index] === null) break;
-  }
+
+    for (const neighborIdx of getNeighbors(index)) {
+      if (neighborIdx === null)       continue; // out of bounds
+      if (next[neighborIdx] === null) continue; // empty neighbour
+
+      const merged = tryMerge(next[index], next[neighborIdx]);
+      if (!merged) continue;
+
+      // Apply the merge
+      next[index]       = merged.aVal;
+      next[neighborIdx] = merged.bVal;
+      mergedThisRound   = true;
+
+      // One merge per iteration — restart the neighbour scan
+      break;
+    }
+
+  } while (mergedThisRound);
 
   return next;
 }
+
 
