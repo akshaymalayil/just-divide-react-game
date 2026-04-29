@@ -1,4 +1,4 @@
-const GameOver = ({ score, level, onRestart }) => {
+const GameOver = ({ score, level, bestScore, onRestart }) => {
   return (
     <div className="gameover-overlay">
       <div className="gameover-card">
@@ -16,6 +16,10 @@ const GameOver = ({ score, level, onRestart }) => {
           <div className="gameover-stat">
             <span className="gameover-stat-label">LEVEL</span>
             <span className="gameover-stat-value">{level}</span>
+          </div>
+          <div className="gameover-stat">
+            <span className="gameover-stat-label">BEST</span>
+            <span className="gameover-stat-value">{bestScore}</span>
           </div>
         </div>
 
