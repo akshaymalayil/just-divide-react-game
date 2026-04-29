@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Grid from './components/Grid';
 import SidePanel from './components/SidePanel';
@@ -24,6 +24,18 @@ function App() {
   const [trashCount, setTrashCount] = useState(10);
   // Game Over flag
   const [isGameOver, setIsGameOver] = useState(false);
+  // Best score — persisted in localStorage
+  const [bestScore, setBestScore] = useState(
+    () => Number(localStorage.getItem('justdivide_best')) || 0
+  );
+
+  // Keep bestScore in sync whenever score increases
+  useEffect(() => {
+    if (score > bestScore) {
+      setBestScore(score);
+      localStorage.setItem('justdivide_best', score);
+    }
+  }, [score]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Level is purely derived from score 
   const level = Math.floor(score / 10) + 1;
@@ -77,6 +89,8 @@ function App() {
     setKeepTile(activeTile);
     advanceQueue();
     setIsDragging(false);
+    // Grid didn't change — check if it was already a dead end
+    if (!hasMovesLeft(grid)) setIsGameOver(true);
   };
 
   /** Drop onto the TRASH slot — blocked when trashCount reaches 0 */
@@ -85,6 +99,8 @@ function App() {
     setTrashCount(prev => prev - 1);
     advanceQueue();                    // discard active tile
     setIsDragging(false);
+    // Grid didn't change — check if it was already a dead end
+    if (!hasMovesLeft(grid)) setIsGameOver(true);
   };
 
   /** Reset all game state to start a new game */
@@ -102,7 +118,7 @@ function App() {
       {isGameOver && (
         <GameOver score={score} level={level} onRestart={handleRestart} />
       )}
-      <Header />
+      <Header bestScore={bestScore} />
 
       <div className="game-area">
         <Grid

@@ -193,6 +193,14 @@ body {
   color: #d94f00;
 }
 
+.best-score {
+  font-size: var(--subtitle-size);
+  font-weight: bold;
+  color: #b8860b;
+  margin: 4px 0 0;
+  letter-spacing: 0.5px;
+}
+
 /* ============================================================
    GAME AREA
    ============================================================ */

@@ -1,8 +1,8 @@
-import catImg   from '../assets/images/cat.png';
+import catImg from '../assets/images/cat.png';
 import badgeImg from '../assets/images/levels_score.png';
 import { getTileImage } from '../game/tileUtils';
 
-const Grid = ({ grid, score, level, isDragging, dragPayload, onDragStart, onDragEnd, onDropOnCell }) => {
+const Grid = ({ grid, score, level, isDragging, onDragStart, onDragEnd, onDropOnCell }) => {
   return (
     <div className="grid-wrapper">
 
@@ -24,25 +24,26 @@ const Grid = ({ grid, score, level, isDragging, dragPayload, onDragStart, onDrag
       {/* ── 4×4 GRID ── */}
       <div className="grid">
         {grid.map((cell, i) => {
-          const isEmpty   = cell === null;
-          const canDrop   = isDragging && isEmpty;
+          const isEmpty = cell === null;
+          const canDrop = isDragging && isEmpty;
 
           return (
             <div
               key={i}
               className={[
                 'cell',
-                !isEmpty  ? 'cell--filled'    : '',
-                canDrop   ? 'cell--droppable' : '',
+                !isEmpty ? 'cell--filled' : '',
+                canDrop ? 'cell--droppable' : '',
               ].join(' ').trim()}
               onDragOver={e => { if (isEmpty) e.preventDefault(); }}
               onDrop={e => {
                 e.preventDefault();
                 if (!isEmpty) return;
                 try {
-                  const raw = e.dataTransfer.getData('application/json');
-                  const { value, source } = raw ? JSON.parse(raw) : (dragPayload ?? {});
-                  if (value != null && source != null) onDropOnCell(i, value, source);
+                  const { value, source } = JSON.parse(
+                    e.dataTransfer.getData('application/json')
+                  );
+                  onDropOnCell(i, value, source);
                 } catch {
                   // malformed dataTransfer — ignore
                 }
