@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Grid from './components/Grid';
+import Header    from './components/Header';
+import Grid      from './components/Grid';
 import SidePanel from './components/SidePanel';
-import GameOver from './components/GameOver';
+import GameOver  from './components/GameOver';
 import './styles/global.css';
 import { randomTile, initQueue, applyMerge, hasMovesLeft } from './game/tileUtils';
 

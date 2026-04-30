@@ -12,11 +12,11 @@ html, body { height: 100%; }
   --grid-pad-side:     20px;
 
   --cat-size:          300px;
-  --top-bar-offset:    -60px;
+  --top-bar-offset:    -110px;
   --badge-w:           170px;
   --badge-h:           70px;
   --badge-font:        16px;
-  --badge-drop:        40px;
+  --badge-drop:        90px;
 
   --panel-w:           calc(var(--cell-size) + 20px);
   --panel-h:           520px;
@@ -24,7 +24,7 @@ html, body { height: 100%; }
   --panel-border:      10px;
 
   --game-gap:          60px;
-  --game-mt:           100px;
+  --game-mt:           120px;
 
   --title-size:        2rem;
   --timer-size:        1.1rem;
@@ -49,11 +49,11 @@ html, body { height: 100%; }
     --grid-pad-side:     12px;
 
     --cat-size:          200px;
-    --top-bar-offset:    -40px;
+    --top-bar-offset:    -75px;
     --badge-w:           116px;
     --badge-h:           48px;
     --badge-font:        12px;
-    --badge-drop:        26px;
+    --badge-drop:        59px;
 
     --panel-w:           calc(var(--cell-size) + 14px);
     --panel-h:           310px;
@@ -61,7 +61,7 @@ html, body { height: 100%; }
     --panel-border:      7px;
 
     --game-gap:          28px;
-    --game-mt:           60px;
+    --game-mt:           80px;
 
     --title-size:        1.3rem;
     --timer-size:        0.9rem;
@@ -86,11 +86,11 @@ html, body { height: 100%; }
     --grid-pad-side:     16px;
 
     --cat-size:          245px;
-    --top-bar-offset:    -50px;
+    --top-bar-offset:    -90px;
     --badge-w:           138px;
     --badge-h:           58px;
     --badge-font:        14px;
-    --badge-drop:        33px;
+    --badge-drop:        73px;
 
     --panel-w:           calc(var(--cell-size) + 16px);
     --panel-h:           380px;
@@ -98,7 +98,7 @@ html, body { height: 100%; }
     --panel-border:      8px;
 
     --game-gap:          44px;
-    --game-mt:           80px;
+    --game-mt:           100px;
 
     --title-size:        1.65rem;
     --timer-size:        1rem;
@@ -123,11 +123,11 @@ html, body { height: 100%; }
     --grid-pad-side:     12px;
 
     --cat-size:          190px;
-    --top-bar-offset:    -38px;
+    --top-bar-offset:    -68px;
     --badge-w:           106px;
     --badge-h:           44px;
     --badge-font:        11px;
-    --badge-drop:        24px;
+    --badge-drop:        54px;
 
     /* panel becomes a horizontal bar in portrait */
     --panel-w:           auto;
@@ -136,7 +136,7 @@ html, body { height: 100%; }
     --panel-border:      7px;
 
     --game-gap:          20px;
-    --game-mt:           60px;
+    --game-mt:           75px;
 
     --title-size:        1.25rem;
     --timer-size:        0.88rem;
@@ -222,7 +222,7 @@ body {
 }
 
 /* ============================================================
-   GRID WRAPPER
+   GRID WRAPPER  — positioning context for the cat-board overlay
    ============================================================ */
 .grid-wrapper {
   position: relative;
@@ -232,29 +232,42 @@ body {
 }
 
 /* ============================================================
-   TOP BAR  (cat + level/score badges)
+   CAT BOARD  (cat mascot + level/score badges)
+   Exact same layout as the original .top-bar that produced the reference UI.
+   Flex row: [badge] [cat] [badge] — badges use relative top to drop down.
    ============================================================ */
-.top-bar {
+.cat-board {
   position: absolute;
   top: var(--top-bar-offset);
+  /* Span exactly the grid width so badges anchor to grid corners */
+  width: calc(4 * var(--grid-col-size) + 3 * var(--grid-gap) + 2 * var(--grid-pad-side));
   display: flex;
   align-items: center;
-  gap: 0;
+  justify-content: center;
   z-index: 2;
 }
 
 .cat-img {
-  width: var(--cat-size);
+  /* Paws wide enough to overlap both badges */
+  width: calc(var(--cat-size) + var(--badge-w));
+  position: relative;
+  z-index: 2;  /* cat in front of badges */
   display: block;
 }
 
+/* Badges anchored to grid left / right corners, behind cat paws */
 .badge-box {
-  position: relative;
+  position: absolute;
   top: var(--badge-drop);
   width: var(--badge-w);
   height: var(--badge-h);
-  flex-shrink: 0;
+  z-index: 1;
 }
+
+.badge-box#level { left: 0; }
+.badge-box#score { right: 0; }
+
+
 
 .badge-img {
   width: 100%;
@@ -280,7 +293,7 @@ body {
   grid-template-columns: repeat(4, var(--grid-col-size));
   gap: var(--grid-gap);
   background: #1f8f97;
-  padding: var(--grid-pad-top) var(--grid-pad-side) var(--grid-pad-side);
+  padding: var(--grid-pad-top) var(--grid-pad-side) var(--grid-pad-side) ;
   border-radius: 25px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }

@@ -1,25 +1,12 @@
-import catImg from '../assets/images/cat.png';
-import badgeImg from '../assets/images/levels_score.png';
+import CatBoard from './CatBoard';
 import { getTileImage } from '../game/tileUtils';
 
 const Grid = ({ grid, score, level, isDragging, onDragStart, onDragEnd, onDropOnCell }) => {
   return (
     <div className="grid-wrapper">
 
-      {/* ── TOP BAR: cat + level/score badges ── */}
-      <div className="top-bar">
-        <div className="badge-box" id="level">
-          <img src={badgeImg} className="badge-img" alt="" />
-          <span>LEVEL {level}</span>
-        </div>
-
-        <img src={catImg} alt="cat" className="cat-img" />
-
-        <div className="badge-box" id="score">
-          <img src={badgeImg} className="badge-img" alt="" />
-          <span>SCORE {score}</span>
-        </div>
-      </div>
+      {/* CatBoard — absolutely positioned above the grid via .cat-board CSS */}
+      <CatBoard score={score} level={level} />
 
       {/* ── 4×4 GRID ── */}
       <div className="grid">
