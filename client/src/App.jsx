@@ -6,6 +6,13 @@ import GameOver from './components/GameOver';
 import './styles/global.css';
 import { randomTile, initQueue, applyMerge, hasMovesLeft } from './game/tileUtils';
 
+/** Format seconds → "mm:ss" */
+const formatTime = (seconds) => {
+  const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const s = String(seconds % 60).padStart(2, '0');
+  return `${m}:${s}`;
+};
+
 function App() {
   // 4×4 grid: null = empty cell
   const [grid, setGrid]         = useState(Array(16).fill(null));
@@ -28,6 +35,8 @@ function App() {
   const [bestScore, setBestScore] = useState(
     () => Number(localStorage.getItem('justdivide_best')) || 0
   );
+  // Timer — elapsed seconds since game start / last restart
+  const [timer, setTimer] = useState(0);
 
   // Keep bestScore in sync whenever score increases
   useEffect(() => {
@@ -36,6 +45,13 @@ function App() {
       localStorage.setItem('justdivide_best', score);
     }
   }, [score]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Timer: tick every second; stop when game is over
+  useEffect(() => {
+    if (isGameOver) return;          // don't start/restart when already over
+    const id = setInterval(() => setTimer(prev => prev + 1), 1000);
+    return () => clearInterval(id);  // cleanup on unmount or re-run
+  }, [isGameOver]);                  // re-runs only when isGameOver changes
 
   // Level is purely derived from score 
   const level = Math.floor(score / 10) + 1;
@@ -111,6 +127,7 @@ function App() {
     setScore(0);
     setTrashCount(10);
     setIsGameOver(false);
+    setTimer(0);          // reset timer; useEffect will restart interval
   };
 
   return (
@@ -118,7 +135,7 @@ function App() {
       {isGameOver && (
         <GameOver score={score} level={level} onRestart={handleRestart} />
       )}
-      <Header bestScore={bestScore} />
+      <Header bestScore={bestScore} timer={formatTime(timer)} />
 
       <div className="game-area">
         <Grid
